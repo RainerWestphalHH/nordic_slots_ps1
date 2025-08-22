@@ -15,10 +15,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Changed to allow scrolling from top */
+            justify-content: flex-start; /* Geändert von center zu flex-start */
             min-height: 100vh;
             position: relative;
-            /* overflow: hidden; Removed to enable scrolling */
+            /* overflow: hidden; wurde entfernt, um Scrollen zu ermöglichen */
             padding: 2rem 0;
         }
         @keyframes fall {
@@ -27,7 +27,7 @@
             100% { transform: translateY(120vh) rotate(720deg); opacity: 0.5; }
         }
         .dollar-note {
-            position: fixed; /* Changed to fixed to stay on screen during scroll */
+            position: absolute;
             top: -50px;
             font-size: 3rem;
             color: #FFD700;
@@ -56,10 +56,10 @@
         #openVideoButton { position: fixed; bottom: 1rem; right: 1rem; z-index: 1001; background-color: #FFD700; color: #000000; padding: 0.75rem; border-radius: 9999px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); cursor: pointer; transition: background-color 0.2s ease-in-out; }
         #openVideoButton:hover { background-color: #FFBF00; }
         #closeVideoButton { background: none; border: none; cursor: pointer; }
-        .nordicslots-main-title { font-size: 4rem; font-weight: 900; color: #00FF00; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1rem; text-shadow: 0 0 15px rgba(0, 255, 0, 0.7); text-align: center; width: 90%; max-width: 800px; }
+        .nordicslots-main-title { font-size: 4rem; font-weight: 900; color: #00FF00; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1rem; text-shadow: 0 0 15px rgba(0, 255, 0, 0.7); text-align: center; width: 90%; max-width: 700px; margin-top: 2rem; }
         .leaderboard-pre-title { font-size: 1.2rem; font-weight: 600; color: #FFD700; margin-bottom: 0.5rem; text-align: center; }
-        .main-leaderboard-container { background-color: #1A1A1A; border-radius: 1.5rem; padding: 2rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); max-width: 800px; width: 90%; text-align: center; position: relative; border: 2px solid #FFD700; padding-top: 1rem; display: flex; flex-direction: column; margin-bottom: 2rem; }
-        .timer-container { margin-bottom: 1rem; padding: 1rem; border: 2px solid #00FF00; border-radius: 0.75rem; background-color: rgba(0, 0, 0, 0.5); max-width: 800px; width: 90%; text-align: center; }
+        .main-leaderboard-container { background-color: #1A1A1A; border-radius: 1.5rem; padding: 2rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); max-width: 700px; width: 90%; text-align: center; position: relative; border: 2px solid #FFD700; padding-top: 1rem; display: flex; flex-direction: column; margin-bottom: 2rem; }
+        .timer-container { margin-bottom: 1rem; padding: 1rem; border: 2px solid #00FF00; border-radius: 0.75rem; background-color: rgba(0, 0, 0, 0.5); max-width: 700px; width: 90%; text-align: center; }
         .timer-container .timer-text { font-size: 1.5rem; font-weight: 700; color: #00FF00; letter-spacing: 0.1em; }
         .leaderboard-header { display: flex; flex-direction: row; align-items: center; justify-content: center; margin-bottom: 1.5rem; flex-shrink: 0; gap: 2rem; }
         .leaderboard-header .header-icon { height: 150px; width: auto; object-fit: contain; transform: rotate(0deg); }
@@ -75,7 +75,7 @@
         .leaderboard-item .rank { width: 10%; text-align: left; color: #ffffff; font-weight: 800; }
         .leaderboard-item.top-1 .rank { color: #000000; }
         .leaderboard-item .name { width: 45%; text-align: left; font-weight: 600; }
-        .leaderboard-item .xp { width: 20%; text-align: center; color: #FF0000; font-size: 0.9rem; }
+        .leaderboard-item .xp { width: 20%; text-align: center; color: #00FF00; font-size: 0.9rem; font-weight: 700; }
         .leaderboard-item .prize { width: 25%; text-align: right; color: #FFD700; font-weight: 700; }
         .leaderboard-item.top-1 .prize { color: #000000; }
         .leaderboard-footer { margin-top: 2rem; font-size: 1.3rem; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.3; flex-shrink: 0; }
@@ -105,11 +105,10 @@
     </div>
 
     <div class="social-links-container">
-        <a href="https://www.youtube.com/@NordicSlots" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-youtube social-icon"></i>YouTube</a>
-        <a href="https://kick.com/nordicslots" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fa-brands fa-kickstarter social-icon"></i>Kick</a>
+        <a href="https://x.com/SlotsNordic" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-twitter social-icon"></i>X (Twitter)</a>
         <a href="https://www.instagram.com/nordic_slots/" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-instagram social-icon"></i>Instagram</a>
-        <a href="https://x.com/SlotsNordic" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-x-twitter social-icon"></i>X</a>
-        <a href="#" class="social-link"><i class="fab fa-discord social-icon"></i>Discord</a>
+        <a href="https://www.youtube.com/@NordicSlots" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-youtube social-icon"></i>YouTube</a>
+        <a href="https://kick.com/nordicslots" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-twitch social-icon"></i>Kick</a>
     </div>
 
     <div id="kickVideoContainer" class="rounded-lg shadow-lg overflow-hidden w-full max-w-xs bg-gray-900">
@@ -188,8 +187,8 @@
                 // API gibt wagered in Cents zurück, daher durch 100 teilen
                 listItem.innerHTML = `
                     <span class="rank">${rank}.</span>
-                    <span class="name">${entry.user.username}</span>
-                    <span class="xp">$${(entry.wagered / 100).toFixed(2)}</span>
+                    <span class="name">${entry.user.username.substring(0, 3)}***</span>
+                    <span class="xp">${(entry.wagered / 100).toFixed(2)} XP</span>
                     <span class="prize">${prizeText}</span>
                 `;
                 leaderboardList.appendChild(listItem);
