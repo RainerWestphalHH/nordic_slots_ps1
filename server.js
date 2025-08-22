@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // SICHER: Der API-Schlüssel ist nur hier auf dem Server bekannt.
-const API_KEY = 'vtTYPePW057KLbPh3vOeej5hLfyX05nGbYVzCHSNqT+3eDsg0mMeHvOjkmbcAA0Debxi56vzPHR2HQ6LU4LFdpsiYky3SM+Ku4Ar';
+const API_KEY = '+IzAuLgXATRBlTxnFWdEHrZisLf0DWKc3E/OVXzYpXZSplDDtgFEDcKmlc9912xqsCAnJECuR7Wf7RwqCDE4Lt6XgvXIN6amuobI';
 const HYPE_API_URL = 'https://wallet-api.hype.bet/api/v1/affiliate/creator/get-stats';
 
 // --- START: CACHING-LOGIK ---
@@ -94,4 +94,5 @@ app.use(express.static(__dirname));
 // Serverstart
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+
 });
