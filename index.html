@@ -6,11 +6,10 @@
     <title>NORDICSLOTS Leaderboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #121212; /* Dunkler Hintergrund wie im Bild */
+            background-color: #121212;
             color: #ffffff;
             display: flex;
             flex-direction: column;
@@ -19,52 +18,149 @@
             min-height: 100vh;
             position: relative;
             padding: 2rem 0;
+            overflow: hidden; /* Verhindert horizontales Scrollen durch die Animation */
         }
-        .social-links-container { display: flex; justify-content: center; gap: 1.5rem; margin-top: 2rem; z-index: 1; flex-wrap: wrap; }
-        .social-link { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #ffffff; font-size: 0.9rem; transition: transform 0.2s ease-in-out, color 0.2s ease-in-out; }
-        .social-link:hover { transform: translateY(-5px); color: #FFD700; }
-        .social-icon { font-size: 2.5rem; margin-bottom: 0.5rem; color: #ffffff; } /* Icons auf Weiß geändert */
-        #kickVideoContainer { position: fixed; bottom: 1rem; right: 1rem; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; }
-        #kickVideoContainer.show { opacity: 1; visibility: visible; }
-        #kickVideoContainer .bg-gray-900 { background-color: rgba(17, 24, 39, 0.9); }
-        #kickVideoContainer iframe { display: block; }
-        #openVideoButton { position: fixed; bottom: 1rem; right: 1rem; z-index: 1001; background-color: #FFD700; color: #000000; padding: 0.75rem; border-radius: 9999px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); cursor: pointer; transition: background-color 0.2s ease-in-out; }
-        #openVideoButton:hover { background-color: #FFBF00; }
-        #closeVideoButton { background: none; border: none; cursor: pointer; }
-        .nordicslots-main-title { font-size: 4rem; font-weight: 900; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1rem; text-shadow: none; text-align: center; width: 90%; max-width: 700px; margin-top: 2rem; }
-        .leaderboard-pre-title { font-size: 1.2rem; font-weight: 600; color: #AAAAAA; margin-bottom: 0.5rem; text-align: center; } /* Farbe geändert */
-        .main-leaderboard-container { background-color: #1E1E1E; border-radius: 1.5rem; padding: 2rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); max-width: 700px; width: 90%; text-align: center; position: relative; border: none; padding-top: 1rem; display: flex; flex-direction: column; margin-bottom: 2rem; }
-        .timer-container { margin-bottom: 1rem; padding: 1rem; border: 2px solid #444; border-radius: 0.75rem; background-color: rgba(0, 0, 0, 0.2); max-width: 700px; width: 90%; text-align: center; }
-        .timer-container .timer-text { font-size: 1.5rem; font-weight: 700; color: #FFFFFF; letter-spacing: 0.1em; }
-        .leaderboard-header { display: flex; flex-direction: row; align-items: center; justify-content: center; margin-bottom: 1.5rem; flex-shrink: 0; gap: 2rem; }
-        .leaderboard-header h1 { font-size: 2.5rem; font-weight: 900; color: #ffffff; letter-spacing: 0.15em; text-transform: uppercase; margin: 0; }
-        .leaderboard-list { list-style: none; padding: 0; margin: 0; overflow-y: visible; flex-grow: 1; padding-right: 0; scrollbar-width: none; }
-        .leaderboard-list::-webkit-scrollbar { display: none; }
-        .leaderboard-item { display: flex; justify-content: space-between; align-items: center; background-color: #2c2c2c; padding: 0.6rem 1.2rem; margin-bottom: 0.75rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600; color: #ffffff; transition: background-color 0.2s ease-in-out; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); }
-        .leaderboard-item:hover { background-color: #3a3a3a; }
-        .leaderboard-item.top-1 { background: linear-gradient(to right, #FFD700, #DAA520); color: #000000; font-size: 1.1rem; font-weight: 800; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
-        .leaderboard-item.top-2 { background-color: #C0C0C0; color: #000000; font-weight: 700; } /* Silber */
-        .leaderboard-item.top-3 { background-color: #CD7F32; color: #000000; font-weight: 700; } /* Bronze */
-        .leaderboard-item .rank { width: 10%; text-align: left; font-weight: 800; }
-        .leaderboard-item.top-1 .rank, .leaderboard-item.top-2 .rank, .leaderboard-item.top-3 .rank { color: #000000; }
-        .leaderboard-item .name { width: 45%; text-align: left; font-weight: 600; }
-        .leaderboard-item .xp { width: 20%; text-align: center; color: #E0E0E0; font-size: 0.9rem; font-weight: 700; } /* Farbe auf Hellgrau geändert */
-        .leaderboard-item .prize { width: 25%; text-align: right; font-weight: 700; }
-        .leaderboard-item.top-1 .prize { color: #DAA520; }
-        .leaderboard-item.top-2 .prize { color: #A0A0A0; }
-        .leaderboard-item.top-3 .prize { color: #A56A2A; }
-        .leaderboard-item:not(.top-1):not(.top-2):not(.top-3) .prize { color: #E0E0E0; }
-        .leaderboard-footer { margin-top: 2rem; font-size: 1.3rem; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.3; flex-shrink: 0; }
-        @media (max-width: 640px) { .nordicslots-main-title { font-size: 2.5rem; letter-spacing: 0.15em; } .leaderboard-pre-title { font-size: 1rem; } .timer-container .timer-text { font-size: 1rem; } .main-leaderboard-container { padding: 1rem; max-width: 95%; } .leaderboard-header { flex-direction: column; gap: 0.5rem; } .leaderboard-header h1 { font-size: 1.8rem; letter-spacing: 0.1em; } .leaderboard-item .rank { width: 15%; margin-right: 0.3rem; } .leaderboard-item .name { width: 40%; } .leaderboard-item .xp { width: 20%; text-align: left; margin-left: 0.3rem; } .leaderboard-item .prize { width: 25%; text-align: right; } .leaderboard-footer { font-size: 1rem; letter-spacing: 0.08em; } }
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(120vh) rotate(720deg); opacity: 0.5; }
+        }
+        .dollar-note {
+            position: absolute;
+            top: -50px;
+            font-size: 3rem;
+            color: #FFD700;
+            animation: fall linear infinite;
+            pointer-events: none;
+            z-index: -1; /* Fällt hinter dem Inhalt */
+        }
+        .dollar-note:nth-child(1) { left: 5%; animation-duration: 10s; animation-delay: 0s; }
+        .dollar-note:nth-child(2) { left: 15%; animation-duration: 12s; animation-delay: 2s; }
+        .dollar-note:nth-child(3) { left: 25%; animation-duration: 9s; animation-delay: 1s; }
+        .dollar-note:nth-child(4) { left: 35%; animation-duration: 11s; animation-delay: 3s; }
+        .dollar-note:nth-child(5) { left: 45%; animation-duration: 13s; animation-delay: 0.5s; }
+        .dollar-note:nth-child(6) { left: 55%; animation-duration: 10.5s; animation-delay: 2.5s; }
+        .dollar-note:nth-child(7) { left: 65%; animation-duration: 9.5s; animation-delay: 1.5s; }
+        .dollar-note:nth-child(8) { left: 75%; animation-duration: 12s; animation-delay: 3.5s; }
+        .dollar-note:nth-child(9) { left: 85%; animation-duration: 8s; animation-delay: 0s; }
+        .dollar-note:nth-child(10) { left: 95%; animation-duration: 11s; animation-delay: 2s; }
+        .nordicslots-main-title {
+            font-size: 2rem; /* Angepasst für HYPE.BET-Stil */
+            font-weight: 800;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .main-leaderboard-container {
+            background-color: transparent; /* Kein separater Hintergrund für den Container */
+            max-width: 700px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2rem;
+        }
+        .leaderboard-header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin: 0;
+            margin-bottom: 2rem;
+        }
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2c2c2c;
+            padding: 0.8rem 1.5rem;
+            margin-bottom: 0.75rem;
+            border-radius: 9999px; /* Pillenform */
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .leaderboard-item.top-1 {
+            background: linear-gradient(to right, #FFD700, #DAA520);
+            color: #111;
+            font-weight: 800;
+        }
+        .leaderboard-item.top-2 {
+            background-color: #C0C0C0;
+            color: #111;
+            font-weight: 700;
+        }
+        .leaderboard-item.top-3 {
+            background-color: #CD7F32;
+            color: #111;
+            font-weight: 700;
+        }
+        .leaderboard-item .rank-name-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-grow: 1;
+        }
+        .leaderboard-item .rank {
+            font-weight: 800;
+        }
+        .leaderboard-item .name {
+            font-weight: 600;
+        }
+        .leaderboard-item .xp-prize-container {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .leaderboard-item .xp {
+            color: #E0E0E0;
+            font-weight: 700;
+        }
+        .leaderboard-item.top-1 .xp,
+        .leaderboard-item.top-2 .xp,
+        .leaderboard-item.top-3 .xp {
+            color: #111;
+        }
+        .leaderboard-item .prize {
+            font-weight: 700;
+            color: #FFD700;
+        }
+        .leaderboard-item.top-1 .prize,
+        .leaderboard-item.top-2 .prize,
+        .leaderboard-item.top-3 .prize {
+            color: #111;
+        }
+        .leaderboard-footer {
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            line-height: 1.3;
+            text-align: center;
+        }
+        @media (max-width: 640px) {
+            .leaderboard-header h1 { font-size: 2.5rem; }
+            .leaderboard-item { flex-direction: column; align-items: flex-start; padding: 1rem; border-radius: 1rem; }
+            .xp-prize-container { width: 100%; justify-content: space-between; margin-top: 0.5rem; }
+        }
     </style>
 </head>
 <body>
+    <div class="dollar-note">$</div><div class="dollar-note">$</div><div class="dollar-note">$</div><div class="dollar-note">$</div><div class="dollar-note">$</div><div class="dollar-note">$</div><div class="dollar-note">$</div><div class="dollar-note">$</div><div class="dollar-note">$</div><div class="dollar-note">$</div>
 
-    <div class="nordicslots-main-title">NORDICSLOTS</div>
-    <div class="leaderboard-pre-title">CODE : Nordicslots</div>
-    <div class="timer-container">
-        <span id="countdown-timer" class="timer-text"></span>
-    </div>
+    <div class="nordicslots-main-title">NORDIC.SLOTS</div>
     <div class="main-leaderboard-container">
         <div class="leaderboard-header">
             <h1>LEADERBOARD</h1>
@@ -77,72 +173,36 @@
         </div>
     </div>
 
-    <div class="social-links-container">
-        <a href="https://x.com/SlotsNordic" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-twitter social-icon"></i>X (Twitter)</a>
-        <a href="https://www.instagram.com/nordic_slots/" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-instagram social-icon"></i>Instagram</a>
-        <a href="https://www.youtube.com/@NordicSlots" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-youtube social-icon"></i>YouTube</a>
-        <a href="https://kick.com/nordicslots" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-twitch social-icon"></i>Kick</a>
-    </div>
-
-    <div id="kickVideoContainer" class="rounded-lg shadow-lg overflow-hidden w-full max-w-xs bg-gray-900">
-        <div class="flex justify-between items-center p-2">
-            <span class="text-white text-sm font-semibold">Live Stream</span>
-            <button id="closeVideoButton" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-        </div>
-        <iframe src="https://player.kick.com/yourchannel" width="100%" height="200" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>
-    </div>
-    <button id="openVideoButton" class="flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V9a2 2 0 00-2-2H4z"></path></svg></button>
-
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Kick Video Player JS (unverändert)
-        const kickVideoContainer = document.getElementById('kickVideoContainer');
-        const openVideoButton = document.getElementById('openVideoButton');
-        const closeVideoButton = document.getElementById('closeVideoButton');
-        openVideoButton.addEventListener('click', function() { kickVideoContainer.classList.add('show'); openVideoButton.style.display = 'none'; });
-        closeVideoButton.addEventListener('click', function() { kickVideoContainer.classList.remove('show'); openVideoButton.style.display = 'flex'; });
-
         const leaderboardList = document.getElementById('leaderboard-list');
-        const countdownEl = document.getElementById('countdown-timer');
 
-        // Funktion zum Abrufen der Leaderboard-Daten von Ihrem eigenen Backend
         async function fetchLeaderboardData() {
             try {
-                // Mock-Daten, um das Design ohne API-Aufruf zu testen
-                const mockData = {
-                    summarizedBets: [
-                        { user: { username: 'IrishCryptoGirl' }, wagered: 3466100 },
-                        { user: { username: 'AverageJason' }, wagered: 3449900 },
-                        { user: { username: 'Fatguysdontrun' }, wagered: 1560800 },
-                        { user: { username: 'Zero69cool' }, wagered: 1166200 },
-                        { user: { username: 'beltet2' }, wagered: 631600 },
-                        { user: { username: 'Katy2014' }, wagered: 391300 },
-                        { user: { username: 'Ilovetheboyz' }, wagered: 370800 },
-                        { user: { username: 'Knutti7400' }, wagered: 353300 },
-                        { user: { username: 'cbrooooo' }, wagered: 272400 },
-                        { user: { username: 'smokinmikeyslots' }, wagered: 250800 },
-                    ]
-                };
-                renderLeaderboard(mockData.summarizedBets);
-
+                const response = await fetch('/api/leaderboard');
+                if (!response.ok) {
+                    throw new Error(`Server-Fehler: ${response.statusText} (${response.status})`);
+                }
+                const data = await response.json();
+                if (data && data.summarizedBets && Array.isArray(data.summarizedBets)) {
+                    renderLeaderboard(data.summarizedBets);
+                } else {
+                    renderError('Unerwartetes API-Format.');
+                }
             } catch (error) {
                 console.error('Fehler beim Abrufen der Leaderboard-Daten:', error);
                 renderError(error.message);
             }
         }
 
-
-        // Funktion zum Rendern des Leaderboards
         function renderLeaderboard(bets) {
             leaderboardList.innerHTML = '';
-
             if (bets.length === 0) {
                 renderError('Keine Daten für diesen Zeitraum verfügbar.');
                 return;
             }
 
             bets.sort((a, b) => (b.wagered || 0) - (a.wagered || 0));
-
             const topTen = bets.slice(0, 10);
 
             topTen.forEach((entry, index) => {
@@ -150,58 +210,37 @@
                 let topClass = '';
                 let prizeText = '';
 
-                if (rank === 1) { topClass = 'top-1'; prizeText = 'PRIZE $400'; }
-                else if (rank === 2) { topClass = 'top-2'; prizeText = 'PRIZE $300'; }
-                else if (rank === 3) { topClass = 'top-3'; prizeText = 'PRIZE $200'; }
-                else {
-                    const prizes = ['$150', '$100', '$90', '$80', '$70', '$60', '$50'];
-                    prizeText = prizes[index - 3] || '';
-                }
+                // Prize mapping based on rank
+                const prizes = ['$400', '$300', '$200', '$150', '$100', '$90', '$80', '$70', '$60', '$50'];
+                prizeText = prizes[index] || '';
+
+                if (rank === 1) { topClass = 'top-1'; }
+                else if (rank === 2) { topClass = 'top-2'; }
+                else if (rank === 3) { topClass = 'top-3'; }
 
                 const listItem = document.createElement('li');
                 listItem.className = `leaderboard-item ${topClass}`;
-                // API gibt wagered in Cents zurück, daher durch 100 teilen
+                
+                const wageredAmount = (entry.wagered / 100).toFixed(0); // Format XP without decimals
+
                 listItem.innerHTML = `
-                    <span class="rank">${rank}.</span>
-                    <span class="name">${entry.user.username.substring(0, 3)}***</span>
-                    <span class="xp">${(entry.wagered / 100).toFixed(2)} XP</span>
-                    <span class="prize">${prizeText}</span>
+                    <div class="rank-name-container">
+                        <span class="rank">${rank}.</span>
+                        <span class="name">${entry.user.username}</span>
+                    </div>
+                    <div class="xp-prize-container">
+                        <span class="xp">XP ${wageredAmount}</span>
+                        <span class="prize">${prizeText}</span>
+                    </div>
                 `;
                 leaderboardList.appendChild(listItem);
             });
         }
 
-        // Funktion zur Anzeige von Fehlern
         function renderError(message) {
-             leaderboardList.innerHTML = `<li class="error-message">Fehler beim Laden: ${message}</li>`;
+             leaderboardList.innerHTML = `<li class="error-message" style="text-align: center; color: #ff6b6b;">Fehler beim Laden: ${message}</li>`;
         }
-
-        // Countdown-Timer JS (unverändert)
-        function updateCountdown() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
-            const lastDayOfMonth = new Date(year, month + 1, 0);
-            const timeLeft = lastDayOfMonth - now;
-
-            if (timeLeft < 0) {
-                clearInterval(timerInterval);
-                countdownEl.textContent = "00:00:00:00";
-                return;
-            }
         
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-        
-            countdownEl.textContent = `${String(days).padStart(2, '0')}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
-
-        const timerInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-        
-        // Leaderboard beim Laden der Seite abrufen
         fetchLeaderboardData();
     });
     </script>
