@@ -1,1 +1,0 @@
-# nordic_slots_ps1
